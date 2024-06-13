@@ -11,22 +11,13 @@
   font-size: 50px;
   align-self: center;
 }
-.home-navlink {
-  display: contents;
-}
-.home-image {
-  width: auto;
-  height: var(--dl-size-size-xsmall);
-  object-fit: cover;
-  text-decoration: none;
-}
 .home-container1 {
   height: 344px;
 }
 .home-container2 {
   display: contents;
 }
-.home-navlink1 {
+.home-navlink {
   display: contents;
 }
 .home-container3 {
