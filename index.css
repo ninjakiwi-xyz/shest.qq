@@ -27,7 +27,10 @@
   text-decoration: none;
 }
 .home-image {
+  top: 741px;
+  left: 545px;
   width: 110px;
   height: 112px;
+  position: absolute;
   object-fit: cover;
 }
