@@ -26,6 +26,9 @@
   position: relative;
   text-decoration: none;
 }
+.home-navlink1 {
+  display: contents;
+}
 .home-image {
   top: 741px;
   left: 545px;
@@ -33,4 +36,5 @@
   height: 112px;
   position: absolute;
   object-fit: cover;
+  text-decoration: none;
 }
