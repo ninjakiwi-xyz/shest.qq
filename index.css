@@ -7,6 +7,10 @@
   flex-direction: column;
   justify-content: center;
 }
+.home-text {
+  font-size: 50px;
+  align-self: center;
+}
 .home-container1 {
   height: 344px;
 }
