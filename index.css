@@ -11,30 +11,27 @@
   font-size: 50px;
   align-self: center;
 }
+.home-navlink {
+  display: contents;
+}
+.home-image {
+  width: auto;
+  height: var(--dl-size-size-xsmall);
+  object-fit: cover;
+  text-decoration: none;
+}
 .home-container1 {
   height: 344px;
 }
 .home-container2 {
   display: contents;
 }
-.home-navlink {
+.home-navlink1 {
   display: contents;
 }
 .home-container3 {
   border: 2px dashed rgba(120, 120, 120, 0.4);
   display: flex;
   position: relative;
-  text-decoration: none;
-}
-.home-navlink1 {
-  display: contents;
-}
-.home-image {
-  top: 741px;
-  left: 545px;
-  width: 110px;
-  height: 112px;
-  position: absolute;
-  object-fit: cover;
   text-decoration: none;
 }
