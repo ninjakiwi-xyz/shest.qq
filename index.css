@@ -17,3 +17,16 @@
 .home-container2 {
   display: contents;
 }
+.home-navlink {
+  display: contents;
+}
+.home-container3 {
+  display: flex;
+  position: relative;
+  text-decoration: none;
+}
+.home-image {
+  width: 36px;
+  height: 24px;
+  object-fit: cover;
+}
