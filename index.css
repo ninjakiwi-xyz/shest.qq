@@ -7,6 +7,9 @@
   flex-direction: column;
   justify-content: center;
 }
+.home-container1 {
+  height: 344px;
+}
 .home-container2 {
   display: contents;
 }
