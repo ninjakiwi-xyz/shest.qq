@@ -10,3 +10,17 @@
   font-size: 128px;
   align-self: center;
 }
+@media(max-width: 767px) {
+  .about-text {
+    width: 100%;
+    text-align: center;
+  }
+}
+@media(max-width: 479px) {
+  .about-text {
+    width: 100%;
+    font-size: 56px;
+    align-self: center;
+    text-align: center;
+  }
+}
