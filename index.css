@@ -33,6 +33,10 @@
   }
 }
 @media(max-width: 479px) {
+  .home-text {
+    align-self: center;
+    text-align: center;
+  }
   .home-container1 {
     width: 80%;
   }

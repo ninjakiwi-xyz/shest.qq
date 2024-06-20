@@ -7,7 +7,7 @@
   justify-content: center;
 }
 .about-text {
-  font-size: 128px;
+  font-size: 55px;
   align-self: center;
 }
 @media(max-width: 767px) {
@@ -17,10 +17,19 @@
   }
 }
 @media(max-width: 479px) {
+  .about-container {
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
   .about-text {
     width: 100%;
     font-size: 56px;
     align-self: center;
     text-align: center;
+  }
+  .about-text1 {
+    font-size: 15px;
+    text-align: left;
   }
 }
