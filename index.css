@@ -27,6 +27,13 @@
   position: relative;
   text-decoration: none;
 }
+.home-container4 {
+  width: 808px;
+  align-self: center;
+}
+.home-container5 {
+  display: contents;
+}
 @media(max-width: 991px) {
   .home-container1 {
     width: 80%;
@@ -39,5 +46,11 @@
   }
   .home-container1 {
     width: 80%;
+  }
+  .home-container4 {
+    width: 474px;
+    height: 262px;
+    margin-right: 0px;
+    padding-right: 0px;
   }
 }
