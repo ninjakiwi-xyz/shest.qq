@@ -446,21 +446,14 @@ function loadSampleData() {
     ];
 
     // Загружаем примеры с разницей в несколько минут для каждого
+    const now = new Date();
     sampleApplications.forEach((app, index) => {
         // Создаём временную метку для каждого примера с разницей в 5 минут
-        const now = new Date();
         const applicationTime = new Date(now.getTime() - (index * 5 * 60 * 1000)); // Вычитаем 5 минут на каждый пример
         
-        // Добавляем заявку с собственным временем создания
-        const applications = ApplicationStorage.getAll();
-        const newApplication = {
-            id: ApplicationStorage.getNextId(),
-            ...app,
-            createdAt: applicationTime.toISOString(),
-            status: 'новая'
-        };
-        applications.push(newApplication);
-        localStorage.setItem(ApplicationStorage.STORAGE_KEY, JSON.stringify(applications));
+        // Добавляем поле createdAt перед добавлением в хранилище
+        app.createdAt = applicationTime.toISOString();
+        ApplicationStorage.add(app);
     });
 
     window.currentStatusFilter = null;
