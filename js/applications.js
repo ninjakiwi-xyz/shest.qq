@@ -38,6 +38,16 @@ function sortApplicationsByDate(applications) {
 // Функция для загрузки и отображения заявок
 function loadApplications() {
     const applications = ApplicationStorage.getAll();
+    
+    // Сортируем все заявки по дате при загрузке
+    const sorted = sortApplicationsByDate(applications);
+    
+    displayApplications(sorted);
+    updateStats(sorted);
+}
+
+// Функция для отображения заявок в таблице
+function displayApplications(applications) {
     const tableWrapper = document.getElementById('tableWrapper');
     const emptyState = document.getElementById('emptyState');
     const table = document.getElementById('applicationsTable');
@@ -45,7 +55,6 @@ function loadApplications() {
     if (applications.length === 0) {
         tableWrapper.style.display = 'none';
         emptyState.style.display = 'block';
-        updateStats([]);
         return;
     }
 
@@ -83,8 +92,6 @@ function loadApplications() {
         `;
         table.appendChild(row);
     });
-
-    updateStats(applications);
 }
 
 // Функция для преобразования статуса
@@ -210,6 +217,7 @@ function applyFilters() {
     const applications = ApplicationStorage.getAll();
     const currentStatusFilter = window.currentStatusFilter || null;
 
+    // Фильтруем заявки по поиску и статусу
     const filtered = applications.filter(app => {
         const matchesSearch = searchTerm === '' || 
                             app.name.toLowerCase().includes(searchTerm) ||
@@ -224,7 +232,8 @@ function applyFilters() {
     // Сортируем отфильтрованные заявки по дате
     const sorted = sortApplicationsByDate(filtered);
 
-    displayFilteredApplications(sorted);
+    // Отображаем отсортированные заявки
+    displayApplications(sorted);
 }
 
 // Функция для отображения отфильтрованных заявок
