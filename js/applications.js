@@ -87,6 +87,8 @@ function viewDetails(id) {
         minute: '2-digit'
     });
 
+    const statusClass = `status-${app.status.toLowerCase().replace(' ', '-')}`;
+
     modalBody.innerHTML = `
         <div class="detail-row">
             <div class="detail-label">ID заявки</div>
@@ -110,11 +112,19 @@ function viewDetails(id) {
         </div>
         <div class="detail-row">
             <div class="detail-label">Статус</div>
-            <div class="detail-value"><span class="status-badge status-${app.status.toLowerCase()}">${getStatusText(app.status)}</span></div>
+            <div class="detail-value"><span class="status-badge ${statusClass}">${getStatusText(app.status)}</span></div>
         </div>
         <div class="detail-row">
             <div class="detail-label">Дата получения</div>
             <div class="detail-value">${formattedDate}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Изменить статус</div>
+            <div class="status-buttons">
+                <button class="btn-status btn-status-new ${app.status === 'новая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'новая')">Новая</button>
+                <button class="btn-status btn-status-processing ${app.status === 'в обработке' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'в обработке')">В обработке</button>
+                <button class="btn-status btn-status-completed ${app.status === 'завершённая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'завершённая')">Закрыта</button>
+            </div>
         </div>
     `;
 
@@ -124,6 +134,13 @@ function viewDetails(id) {
 // Функция для закрытия модального окна
 function closeModal() {
     document.getElementById('detailModal').classList.remove('active');
+}
+
+// Функция для изменения статуса заявки
+function changeStatus(id, newStatus) {
+    ApplicationStorage.update(id, { status: newStatus });
+    viewDetails(id); // Обновляем модальное окно
+    loadApplications(); // Обновляем таблицу
 }
 
 // Функция для удаления заявки

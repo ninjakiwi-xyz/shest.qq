@@ -352,6 +352,51 @@
             font-size: 14px;
         }
 
+        .status-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-status {
+            padding: 8px 16px;
+            font-size: 12px;
+            border-radius: 3px;
+            border: 2px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .btn-status:hover {
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+
+        .btn-status.active {
+            background-color: #0066cc;
+            color: white;
+            border-color: #0066cc;
+        }
+
+        .btn-status-new.active {
+            background-color: #1976d2;
+            border-color: #1976d2;
+        }
+
+        .btn-status-processing.active {
+            background-color: #f57c00;
+            border-color: #f57c00;
+        }
+
+        .btn-status-completed.active {
+            background-color: #388e3c;
+            border-color: #388e3c;
+        }
+
         @media (max-width: 768px) {
             header .container {
                 flex-direction: column;
@@ -471,7 +516,7 @@
             </div>
             <div class="modal-body" id="modalBody"></div>
             <div class="modal-footer">
-                <button class="btn" onclick="closeModal()">Закрыть</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
             </div>
         </div>
     </div>
