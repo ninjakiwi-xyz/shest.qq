@@ -1,6 +1,40 @@
 // Глобальная переменная для отслеживания текущей открытой заявки
 let currentOpenApplicationId = null;
 
+// Переменная для управления сортировкой
+let sortOrder = 'desc'; // 'desc' - от новых к старым, 'asc' - от старых к новым
+
+// Функция для переключения порядка сортировки
+function toggleSort() {
+    sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+    
+    // Обновляем визуальный индикатор
+    const sortIndicator = document.querySelector('.sort-indicator');
+    if (sortIndicator) {
+        sortIndicator.classList.toggle('asc');
+        sortIndicator.classList.toggle('desc');
+    }
+    
+    // Применяем фильтры с новым порядком сортировки
+    applyFilters();
+}
+
+// Функция для сортировки заявок по дате
+function sortApplicationsByDate(applications) {
+    return applications.sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        
+        if (sortOrder === 'desc') {
+            // От новых к старым
+            return dateB - dateA;
+        } else {
+            // От старых к новым
+            return dateA - dateB;
+        }
+    });
+}
+
 // Функция для загрузки и отображения заявок
 function loadApplications() {
     const applications = ApplicationStorage.getAll();
@@ -187,7 +221,10 @@ function applyFilters() {
         return matchesSearch && matchesStatus;
     });
 
-    displayFilteredApplications(filtered);
+    // Сортируем отфильтрованные заявки по дате
+    const sorted = sortApplicationsByDate(filtered);
+
+    displayFilteredApplications(sorted);
 }
 
 // Функция для отображения отфильтрованных заявок

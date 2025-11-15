@@ -205,6 +205,28 @@
             color: #555;
         }
 
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th.sortable:hover {
+            background-color: #f0f0f0;
+        }
+
+        .sort-indicator {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 12px;
+            vertical-align: middle;
+            transition: transform 0.2s;
+        }
+
+        .sort-indicator.asc {
+            transform: rotate(180deg);
+        }
+
         td {
             padding: 15px;
             border-bottom: 1px solid #e0e0e0;
@@ -537,7 +559,7 @@
                             <th>Email</th>
                             <th>Телефон</th>
                             <th>Статус</th>
-                            <th>Дата</th>
+                            <th class="sortable" onclick="toggleSort()">Дата <span class="sort-indicator desc">▼</span></th>
                             <th>Действия</th>
                         </tr>
                     </thead>
