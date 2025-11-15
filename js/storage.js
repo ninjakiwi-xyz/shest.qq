@@ -1,6 +1,7 @@
 // Модуль для управления хранилищем заявок
 const ApplicationStorage = {
     STORAGE_KEY: 'lawyer_applications',
+    NEXT_ID_KEY: 'lawyer_applications_next_id',
 
     // Получить все заявки
     getAll() {
@@ -8,11 +9,24 @@ const ApplicationStorage = {
         return data ? JSON.parse(data) : [];
     },
 
+    // Получить следующий ID
+    getNextId() {
+        let nextId = localStorage.getItem(this.NEXT_ID_KEY);
+        if (nextId === null) {
+            // Если это первая заявка, начинаем с 1
+            nextId = 1;
+        } else {
+            nextId = parseInt(nextId) + 1;
+        }
+        localStorage.setItem(this.NEXT_ID_KEY, nextId);
+        return nextId;
+    },
+
     // Добавить новую заявку
     add(applicationData) {
         const applications = this.getAll();
         const newApplication = {
-            id: Date.now(),
+            id: this.getNextId(),
             ...applicationData,
             createdAt: new Date().toISOString(),
             status: 'новая'
@@ -44,5 +58,6 @@ const ApplicationStorage = {
     // Очистить все заявки
     clear() {
         localStorage.removeItem(this.STORAGE_KEY);
+        localStorage.removeItem(this.NEXT_ID_KEY);
     }
 };

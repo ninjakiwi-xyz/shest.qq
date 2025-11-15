@@ -1,3 +1,6 @@
+// Глобальная переменная для отслеживания текущей открытой заявки
+let currentOpenApplicationId = null;
+
 // Функция для загрузки и отображения заявок
 function loadApplications() {
     const applications = ApplicationStorage.getAll();
@@ -72,6 +75,7 @@ function escapeHtml(text) {
 
 // Функция для просмотра деталей заявки
 function viewDetails(id) {
+    currentOpenApplicationId = id; // Сохраняем ID открытой заявки
     const applications = ApplicationStorage.getAll();
     const app = applications.find(a => a.id === id);
 
@@ -93,9 +97,9 @@ function viewDetails(id) {
         <div class="detail-row">
             <div class="detail-label">Изменить статус</div>
             <div class="status-buttons">
-                <button class="btn-status btn-status-new ${app.status === 'новая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'новая')">Новая</button>
-                <button class="btn-status btn-status-processing ${app.status === 'в обработке' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'в обработке')">В обработке</button>
-                <button class="btn-status btn-status-completed ${app.status === 'завершённая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'завершённая')">Закрыта</button>
+                <button class="btn-status btn-status-new ${app.status === 'новая' ? 'active' : ''}" onclick="changeStatus('новая')">Новая</button>
+                <button class="btn-status btn-status-processing ${app.status === 'в обработке' ? 'active' : ''}" onclick="changeStatus('в обработке')">В обработке</button>
+                <button class="btn-status btn-status-completed ${app.status === 'завершённая' ? 'active' : ''}" onclick="changeStatus('завершённая')">Закрыта</button>
             </div>
         </div>
         <div class="detail-row">
@@ -137,9 +141,11 @@ function closeModal() {
 }
 
 // Функция для изменения статуса заявки
-function changeStatus(id, newStatus) {
-    ApplicationStorage.update(id, { status: newStatus });
-    viewDetails(id); // Обновляем модальное окно
+function changeStatus(newStatus) {
+    if (currentOpenApplicationId === null) return;
+    
+    ApplicationStorage.update(currentOpenApplicationId, { status: newStatus });
+    viewDetails(currentOpenApplicationId); // Обновляем модальное окно
     // Применяем фильтры вместо loadApplications чтобы сохранить активный фильтр
     applyFilters();
 }
