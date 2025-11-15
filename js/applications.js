@@ -233,10 +233,10 @@ function exportToExcel() {
     if (typeof XLSX === 'undefined') {
         // Загружаем библиотеку динамически
         loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js', function() {
-            performExport(applications);
+            performExcel(applications);
         });
     } else {
-        performExport(applications);
+        performExcel(applications);
     }
 }
 
@@ -251,8 +251,8 @@ function loadScript(src, callback) {
     document.head.appendChild(script);
 }
 
-function performExport(applications) {
-    // Подготовка данных для экспорта
+function performExcel(applications) {
+    // Подготовка данных для экспорта - только нужные колонки
     const exportData = applications.map(app => {
         const date = new Date(app.createdAt);
         const formattedDate = date.toLocaleDateString('ru-RU', {
@@ -265,51 +265,51 @@ function performExport(applications) {
         });
 
         return {
-            'ID': app.id,
+            'id': app.id,
             'Имя': app.name,
             'Email': app.email,
             'Телефон': app.phone,
-            'Сообщение': app.message,
             'Статус': getStatusText(app.status),
-            'Дата создания': formattedDate
+            'Дата': formattedDate
         };
     });
 
-    // Создание книги Excel
-    const worksheet = XLSX.utils.json_to_sheet(exportData, {
-        header: ['ID', 'Имя', 'Email', 'Телефон', 'Сообщение', 'Статус', 'Дата создания']
-    });
-
+    // Создание книги Excel с правильным порядком колонок
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    
     // Установка ширины колонок
-    worksheet['!cols'] = [
-        { wch: 12 },  // ID
+    ws['!cols'] = [
+        { wch: 12 },  // id
         { wch: 20 },  // Имя
         { wch: 25 },  // Email
         { wch: 15 },  // Телефон
-        { wch: 40 },  // Сообщение
         { wch: 15 },  // Статус
-        { wch: 20 }   // Дата создания
+        { wch: 20 }   // Дата
     ];
 
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Заявки');
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Заявки');
 
     // Скачивание файла
     const fileName = `заявки_${new Date().getTime()}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
+    XLSX.writeFile(wb, fileName);
 }
 
 // Альтернативная функция экспорта в CSV (на случай если SheetJS не загружается)
 function exportToCSV(applications) {
     let csv = '\uFEFF'; // BOM для корректного отображения русских символов
-    csv += 'ID,Имя,Email,Телефон,Сообщение,Статус,Дата создания\n';
+    csv += 'id,Имя,Email,Телефон,Статус,Дата\n';
 
     applications.forEach(app => {
         const date = new Date(app.createdAt);
         const formattedDate = date.toLocaleDateString('ru-RU') + ' ' + date.toLocaleTimeString('ru-RU');
         
-        const message = app.message.replace(/"/g, '""'); // Экранирование кавычек
-        csv += `"${app.id}","${app.name}","${app.email}","${app.phone}","${message}","${getStatusText(app.status)}","${formattedDate}"\n`;
+        const name = app.name.replace(/"/g, '""');
+        const email = app.email.replace(/"/g, '""');
+        const phone = app.phone.replace(/"/g, '""');
+        const status = getStatusText(app.status).replace(/"/g, '""');
+        
+        csv += `${app.id},"${name}","${email}","${phone}","${status}","${formattedDate}"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
