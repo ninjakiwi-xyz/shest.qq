@@ -91,6 +91,14 @@ function viewDetails(id) {
 
     modalBody.innerHTML = `
         <div class="detail-row">
+            <div class="detail-label">Изменить статус</div>
+            <div class="status-buttons">
+                <button class="btn-status btn-status-new ${app.status === 'новая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'новая')">Новая</button>
+                <button class="btn-status btn-status-processing ${app.status === 'в обработке' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'в обработке')">В обработке</button>
+                <button class="btn-status btn-status-completed ${app.status === 'завершённая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'завершённая')">Закрыта</button>
+            </div>
+        </div>
+        <div class="detail-row">
             <div class="detail-label">ID заявки</div>
             <div class="detail-value">#${app.id}</div>
         </div>
@@ -118,14 +126,6 @@ function viewDetails(id) {
             <div class="detail-label">Дата получения</div>
             <div class="detail-value">${formattedDate}</div>
         </div>
-        <div class="detail-row">
-            <div class="detail-label">Изменить статус</div>
-            <div class="status-buttons">
-                <button class="btn-status btn-status-new ${app.status === 'новая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'новая')">Новая</button>
-                <button class="btn-status btn-status-processing ${app.status === 'в обработке' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'в обработке')">В обработке</button>
-                <button class="btn-status btn-status-completed ${app.status === 'завершённая' ? 'active' : ''}" onclick="changeStatus(${app.id}, 'завершённая')">Закрыта</button>
-            </div>
-        </div>
     `;
 
     document.getElementById('detailModal').classList.add('active');
@@ -143,6 +143,29 @@ function changeStatus(id, newStatus) {
     loadApplications(); // Обновляем таблицу
 }
 
+// Функция для фильтрации заявок по статусу
+function filterByStatus(status) {
+    window.currentStatusFilter = status;
+    
+    // Обновляем активную кнопку фильтра
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const buttons = document.querySelectorAll('.filter-btn');
+    if (status === null) {
+        buttons[0].classList.add('active'); // "Все"
+    } else {
+        buttons.forEach(btn => {
+            if (btn.textContent.toLowerCase().includes(status.split(' ')[0])) {
+                btn.classList.add('active');
+            }
+        });
+    }
+    
+    filterApplications();
+}
+
 // Функция для удаления заявки
 function deleteApplication(id) {
     if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
@@ -155,11 +178,16 @@ function deleteApplication(id) {
 function filterApplications() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const applications = ApplicationStorage.getAll();
+    const currentStatusFilter = window.currentStatusFilter || null;
 
     const filtered = applications.filter(app => {
-        return app.name.toLowerCase().includes(searchTerm) ||
-               app.email.toLowerCase().includes(searchTerm) ||
-               app.phone.toLowerCase().includes(searchTerm);
+        const matchesSearch = app.name.toLowerCase().includes(searchTerm) ||
+                            app.email.toLowerCase().includes(searchTerm) ||
+                            app.phone.toLowerCase().includes(searchTerm);
+        
+        const matchesStatus = currentStatusFilter === null || app.status === currentStatusFilter;
+        
+        return matchesSearch && matchesStatus;
     });
 
     const table = document.getElementById('applicationsTable');

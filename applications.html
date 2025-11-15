@@ -126,6 +126,36 @@
             padding: 10px 20px;
         }
 
+        .filter-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background-color: white;
+            color: #666;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            border-color: #0066cc;
+            color: #0066cc;
+        }
+
+        .filter-btn.active {
+            background-color: #0066cc;
+            color: white;
+            border-color: #0066cc;
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -475,6 +505,13 @@
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Поиск по имени, email или телефону...">
                     <button class="btn" onclick="filterApplications()">Поиск</button>
+                </div>
+                <div class="filter-box">
+                    <span style="color: #666; font-weight: bold; font-size: 13px;">Статус:</span>
+                    <button class="filter-btn active" onclick="filterByStatus(null)">Все</button>
+                    <button class="filter-btn" onclick="filterByStatus('новая')">Новые</button>
+                    <button class="filter-btn" onclick="filterByStatus('в обработке')">В обработке</button>
+                    <button class="filter-btn" onclick="filterByStatus('завершённая')">Закрыты</button>
                 </div>
                 <button class="btn" onclick="exportToExcel()">⬇ Скачать Excel</button>
                 <button class="btn btn-secondary" onclick="loadSampleData()">Загрузить примеры</button>
