@@ -42,56 +42,8 @@ function loadApplications() {
     // Сортируем все заявки по дате при загрузке
     const sorted = sortApplicationsByDate(applications);
     
-    displayApplications(sorted);
+    displayFilteredApplications(sorted);
     updateStats(sorted);
-}
-
-// Функция для отображения заявок в таблице
-function displayApplications(applications) {
-    const tableWrapper = document.getElementById('tableWrapper');
-    const emptyState = document.getElementById('emptyState');
-    const table = document.getElementById('applicationsTable');
-
-    if (applications.length === 0) {
-        tableWrapper.style.display = 'none';
-        emptyState.style.display = 'block';
-        return;
-    }
-
-    emptyState.style.display = 'none';
-    tableWrapper.style.display = 'block';
-    table.innerHTML = '';
-
-    applications.forEach(app => {
-        const row = document.createElement('tr');
-        const date = new Date(app.createdAt);
-        const formattedDate = date.toLocaleDateString('ru-RU', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        const statusClass = `status-${app.status.toLowerCase().replace(' ', '-')}`;
-        const statusText = getStatusText(app.status);
-
-        row.innerHTML = `
-            <td>#${app.id}</td>
-            <td>${escapeHtml(app.name)}</td>
-            <td>${escapeHtml(app.email)}</td>
-            <td>${escapeHtml(app.phone)}</td>
-            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-            <td>${formattedDate}</td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn-small btn-view" onclick="viewDetails(${app.id})">Просмотр</button>
-                    <button class="btn-small btn-delete" onclick="deleteApplication(${app.id})">Удалить</button>
-                </div>
-            </td>
-        `;
-        table.appendChild(row);
-    });
 }
 
 // Функция для преобразования статуса
@@ -233,7 +185,7 @@ function applyFilters() {
     const sorted = sortApplicationsByDate(filtered);
 
     // Отображаем отсортированные заявки
-    displayApplications(sorted);
+    displayFilteredApplications(sorted);
 }
 
 // Функция для отображения отфильтрованных заявок
