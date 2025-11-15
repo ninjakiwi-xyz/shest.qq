@@ -140,7 +140,8 @@ function closeModal() {
 function changeStatus(id, newStatus) {
     ApplicationStorage.update(id, { status: newStatus });
     viewDetails(id); // Обновляем модальное окно
-    loadApplications(); // Обновляем таблицу
+    // Применяем фильтры вместо loadApplications чтобы сохранить активный фильтр
+    applyFilters();
 }
 
 // Функция для фильтрации заявок по статусу
@@ -240,7 +241,8 @@ function displayFilteredApplications(filtered) {
 function deleteApplication(id) {
     if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
         ApplicationStorage.delete(id);
-        loadApplications();
+        // Применяем фильтры вместо loadApplications чтобы сохранить активный фильтр
+        applyFilters();
     }
 }
 
@@ -398,6 +400,7 @@ function exportToCSV(applications) {
 function clearAllApplications() {
     if (confirm('Вы уверены, что хотите удалить ВСЕ заявки? Это действие нельзя отменить!')) {
         ApplicationStorage.clear();
+        window.currentStatusFilter = null;
         loadApplications();
         alert('Все заявки успешно удалены');
     }
@@ -442,6 +445,7 @@ function loadSampleData() {
         ApplicationStorage.add(app);
     });
 
+    window.currentStatusFilter = null;
     loadApplications();
     alert('Примеры данных загружены успешно!');
 }
