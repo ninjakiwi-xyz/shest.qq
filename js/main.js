@@ -25,9 +25,27 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         form.reset();
         form.style.display = 'block';
         successMessage.classList.remove('show');
+        updateSubmitButtonState(); // Отключаем кнопку после сброса
     }, 3000);
 
     console.log('Заявка сохранена:', newApplication);
+});
+
+// Функция для управления состоянием кнопки отправки
+function updateSubmitButtonState() {
+    const consentCheckbox = document.getElementById('consent');
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = !consentCheckbox.checked;
+}
+
+// Обработка изменения чекбокса согласия
+document.getElementById('consent').addEventListener('change', function() {
+    updateSubmitButtonState();
+});
+
+// Инициализация состояния кнопки при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    updateSubmitButtonState();
 });
 
 // Обработка плавной прокрутки для навигации

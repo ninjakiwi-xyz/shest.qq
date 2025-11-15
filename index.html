@@ -154,8 +154,44 @@
             transition: background-color 0.3s;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             background-color: #0052a3;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checkbox-group a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
         }
 
         .success-message {
@@ -261,7 +297,11 @@
                     <label for="message">Сообщение</label>
                     <textarea id="message" name="message" required></textarea>
                 </div>
-                <button type="submit">Отправить</button>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consent" name="consent" required>
+                    <label for="consent">Согласен(на) на обработку персональных данных</label>
+                </div>
+                <button type="submit" id="submitBtn" disabled>Отправить</button>
                 <div class="success-message" id="successMessage">Спасибо! Мы свяжемся с вами в ближайшее время.</div>
             </form>
         </div>
