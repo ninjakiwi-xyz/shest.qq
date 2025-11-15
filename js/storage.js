@@ -40,8 +40,8 @@ const ApplicationStorage = {
         const newApplication = {
             id: this.getNextId(),
             ...applicationData,
-            createdAt: new Date().toISOString(),
-            status: 'новая'
+            createdAt: applicationData.createdAt || new Date().toISOString(),
+            status: applicationData.status || 'новая'
         };
         applications.push(newApplication);
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(applications));
