@@ -9,16 +9,28 @@ const ApplicationStorage = {
         return data ? JSON.parse(data) : [];
     },
 
-    // Получить следующий ID
-    getNextId() {
+    // Инициализация счётчика ID на основе существующих заявок
+    initNextId() {
         let nextId = localStorage.getItem(this.NEXT_ID_KEY);
         if (nextId === null) {
-            // Если это первая заявка, начинаем с 1
-            nextId = 1;
-        } else {
-            nextId = parseInt(nextId) + 1;
+            const applications = this.getAll();
+            if (applications.length === 0) {
+                nextId = 1;
+            } else {
+                // Получаем максимальный ID из существующих заявок и добавляем 1
+                const maxId = Math.max(...applications.map(app => app.id || 0));
+                nextId = maxId + 1;
+            }
+            localStorage.setItem(this.NEXT_ID_KEY, nextId);
         }
-        localStorage.setItem(this.NEXT_ID_KEY, nextId);
+    },
+
+    // Получить следующий ID
+    getNextId() {
+        this.initNextId(); // Убедимся, что счётчик инициализирован
+        let nextId = parseInt(localStorage.getItem(this.NEXT_ID_KEY));
+        const newNextId = nextId + 1;
+        localStorage.setItem(this.NEXT_ID_KEY, newNextId);
         return nextId;
     },
 
