@@ -152,36 +152,26 @@ function filterByStatus(status) {
         btn.classList.remove('active');
     });
     
-    const buttons = document.querySelectorAll('.filter-btn');
-    if (status === null) {
-        buttons[0].classList.add('active'); // "Все"
-    } else {
-        buttons.forEach(btn => {
-            if (btn.textContent.toLowerCase().includes(status.split(' ')[0])) {
-                btn.classList.add('active');
-            }
-        });
+    // Определяем какую кнопку активировать
+    const statusValue = status === null ? 'null' : status;
+    const activeBtn = document.querySelector(`.filter-btn[data-status="${statusValue}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
     }
     
-    filterApplications();
+    // Применяем фильтр
+    applyFilters();
 }
 
-// Функция для удаления заявки
-function deleteApplication(id) {
-    if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
-        ApplicationStorage.delete(id);
-        loadApplications();
-    }
-}
-
-// Функция для фильтрации заявок
-function filterApplications() {
+// Функция для применения всех фильтров
+function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const applications = ApplicationStorage.getAll();
     const currentStatusFilter = window.currentStatusFilter || null;
 
     const filtered = applications.filter(app => {
-        const matchesSearch = app.name.toLowerCase().includes(searchTerm) ||
+        const matchesSearch = searchTerm === '' || 
+                            app.name.toLowerCase().includes(searchTerm) ||
                             app.email.toLowerCase().includes(searchTerm) ||
                             app.phone.toLowerCase().includes(searchTerm);
         
@@ -190,13 +180,29 @@ function filterApplications() {
         return matchesSearch && matchesStatus;
     });
 
+    displayFilteredApplications(filtered);
+}
+
+// Функция для отображения отфильтрованных заявок
+function displayFilteredApplications(filtered) {
     const table = document.getElementById('applicationsTable');
+    const tableWrapper = document.getElementById('tableWrapper');
+    const emptyState = document.getElementById('emptyState');
+
     table.innerHTML = '';
 
     if (filtered.length === 0) {
-        table.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">Заявки не найдены</td></tr>';
+        tableWrapper.style.display = 'none';
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+            <div class="empty-state-icon">🔍</div>
+            <p>Заявки не найдены</p>
+        `;
         return;
     }
+
+    emptyState.style.display = 'none';
+    tableWrapper.style.display = 'block';
 
     filtered.forEach(app => {
         const row = document.createElement('tr');
@@ -230,6 +236,19 @@ function filterApplications() {
     });
 }
 
+// Функция для удаления заявки
+function deleteApplication(id) {
+    if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
+        ApplicationStorage.delete(id);
+        loadApplications();
+    }
+}
+
+// Функция для фильтрации заявок
+function filterApplications() {
+    applyFilters();
+}
+
 // Функция для обновления статистики
 function updateStats(applications) {
     const total = applications.length;
@@ -245,13 +264,19 @@ function updateStats(applications) {
 
 // Функция для очистки поиска
 document.addEventListener('DOMContentLoaded', function() {
+    window.currentStatusFilter = null;
     loadApplications();
 
-    // Очистка поиска при очистке поля
+    // Очистка поиска при очистке поля и применение фильтра
     document.getElementById('searchInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             filterApplications();
         }
+    });
+
+    // Применяем фильтр при изменении текста в поле поиска
+    document.getElementById('searchInput').addEventListener('input', function() {
+        applyFilters();
     });
 });
 

@@ -506,12 +506,15 @@
                     <input type="text" id="searchInput" placeholder="Поиск по имени, email или телефону...">
                     <button class="btn" onclick="filterApplications()">Поиск</button>
                 </div>
+            </div>
+
+            <div class="controls">
                 <div class="filter-box">
                     <span style="color: #666; font-weight: bold; font-size: 13px;">Статус:</span>
-                    <button class="filter-btn active" onclick="filterByStatus(null)">Все</button>
-                    <button class="filter-btn" onclick="filterByStatus('новая')">Новые</button>
-                    <button class="filter-btn" onclick="filterByStatus('в обработке')">В обработке</button>
-                    <button class="filter-btn" onclick="filterByStatus('завершённая')">Закрыты</button>
+                    <button class="filter-btn active" data-status="null" onclick="filterByStatus(null)">Все</button>
+                    <button class="filter-btn" data-status="новая" onclick="filterByStatus('новая')">Новые</button>
+                    <button class="filter-btn" data-status="в обработке" onclick="filterByStatus('в обработке')">В обработке</button>
+                    <button class="filter-btn" data-status="завершённая" onclick="filterByStatus('завершённая')">Закрыты</button>
                 </div>
                 <button class="btn" onclick="exportToExcel()">⬇ Скачать Excel</button>
                 <button class="btn btn-secondary" onclick="loadSampleData()">Загрузить примеры</button>
